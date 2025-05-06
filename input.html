@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Input</title>
+  <style>
+    @font-face {
+        font-family: "ppneue";
+        src: url(fonts/PPNeueMontreal-Book.otf);
+    }
+    body {
+      font-family: "ppneue";
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      border: none;
+      background-color: #ff00ea;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #00ff0d;
+      border: 2px #000 dashed;
+    }
+    .responses {
+      margin-top: 30px;
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
+    }
+    .response {
+      background-color: #f0f0f0;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    .timestamp {
+      font-size: 12px;
+      color: #555;
+      margin-top: 5px;
+    }
+    .name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>What's your favorite typeface?</h2>
+
+<input type="text" id="name" placeholder="Your name (optional)">
+<textarea id="feedback" placeholder="Type here..."></textarea>
+<button onclick="submitFeedback()">Submit</button>
+
+<div class="responses">
+  <h3>User Responses:</h3>
+  <div id="feedback-list"></div>
+</div>
+
+<script>
+const scriptURL = 'YOUR_APPS_SCRIPT_URL';
+
+async function submitFeedback() {
+  const nameInput = document.getElementById('name');
+  const feedbackInput = document.getElementById('feedback');
+
+  const name = nameInput.value.trim();
+  const feedback = feedbackInput.value.trim();
+
+  if (!feedback) {
+    alert('Please type your feedback.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('name', name || 'Anonymous');
+  formData.append('feedback', feedback);
+
+  await fetch(scriptURL, { method: 'POST', body: formData });
+
+  nameInput.value = '';
+  feedbackInput.value = '';
+  await loadFeedback();
+}
+
+async function loadFeedback() {
+  const response = await fetch(scriptURL);
+  const data = await response.json();
+
+  const feedbackList = document.getElementById('feedback-list');
+  feedbackList.innerHTML = '';
+
+  data.reverse().forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'response';
+
+    div.innerHTML = `
+      <div class="name">${item.name}</div>
+      <p>${item.feedback}</p>
+      <div class="timestamp">${new Date(item.timestamp).toLocaleString()}</div>
+    `;
+
+    feedbackList.appendChild(div);
+  });
+}
+
+window.onload = loadFeedback;
+</script>
+
+</body>
+</html>
