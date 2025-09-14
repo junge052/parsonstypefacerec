@@ -9,9 +9,11 @@
         src: url(fonts/PPNeueMontreal-Book.otf);
     }
     body {
-      font-family: "ppneue";
+      font-family: "helvetica";
       padding: 20px;
       background-color: rgba(0, 0, 0, 0.15);
+      letter-spacing: -1px;
+      margin: 10px;
     }
     input, textarea {
       width: 100%;
@@ -70,12 +72,12 @@
 </div>
 
 <script>
-const scriptURL = 'YOUR_APPS_SCRIPT_URL';
+const scriptURL = 'https://script.google.com/macros/s/AKfycbxYFFh8QmNofxmey1k8UyJxX2MV4Ry7FDeCZ3w3oZkdr-f-luR0z-_2VMKptflisdnZ6Q/exec';
 
 async function submitFeedback() {
   const nameInput = document.getElementById('name');
   const feedbackInput = document.getElementById('feedback');
-
+  
   const name = nameInput.value.trim();
   const feedback = feedbackInput.value.trim();
 
@@ -96,24 +98,28 @@ async function submitFeedback() {
 }
 
 async function loadFeedback() {
-  const response = await fetch(scriptURL);
-  const data = await response.json();
+  try {
+    const response = await fetch(scriptURL);
+    const data = await response.json();
 
-  const feedbackList = document.getElementById('feedback-list');
-  feedbackList.innerHTML = '';
+    const feedbackList = document.getElementById('feedback-list');
+    feedbackList.innerHTML = '';
 
-  data.reverse().forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'response';
+    data.reverse().forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'response';
 
-    div.innerHTML = `
-      <div class="name">${item.name}</div>
-      <p>${item.feedback}</p>
-      <div class="timestamp">${new Date(item.timestamp).toLocaleString()}</div>
-    `;
+      div.innerHTML = `
+        <div class="name">${item.name}</div>
+        <p>${item.feedback}</p>
+        <div class="timestamp">${new Date(item.timestamp).toLocaleString()}</div>
+      `;
 
-    feedbackList.appendChild(div);
-  });
+      feedbackList.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Error loading feedback:", err);
+  }
 }
 
 window.onload = loadFeedback;
