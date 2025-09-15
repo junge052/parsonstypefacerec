@@ -252,6 +252,34 @@ autumn-img:hover {
   max-width: 600px;
   font-size: 20px;
 }
+@media (max-width: 768px) {
+  .description {
+    position: fixed;      
+    bottom: 5%;                /* adjust distance from bottom */
+    left: 50%;                  /* center horizontally */
+    transform: translateX(-50%);
+    width: 70%;                 
+    max-width: 600px;           
+    font-size: 16px;            
+    padding: 0.5rem 1rem;              
+    background: rgba(255,255,255,0.9); /* optional: make it readable over content */
+    border-top: 2px solid black;
+    z-index: 1000;
+    box-shadow: 0 0 20px #39ff14, 0 0 40px #39ff14;              /* stay above other content */
+  }
+}
+
+@media (min-width: 769px) {
+  .description {
+    position: absolute;
+    top: 5rem;
+    right: 0.5rem;
+    margin: 2rem;
+    width: 30%;
+    font-size: 20px;
+  }
+}
+
 
 .e {
   font-family: "anthony";
@@ -523,10 +551,15 @@ h1.autumn {
 }
 
 h2 {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2vw, 1.5rem);
   text-transform: uppercase;
   margin-bottom: 1rem;
   font-weight: bold;
+}
+@media (max-width: 600px) {
+  h2 {
+    max-width: 80%; /* keeps it from stretching across the whole screen */
+  }
 }
 
 /* Image */
@@ -558,7 +591,9 @@ h2 {
   display: flex;
   gap: 1rem;
   z-index: 1000;
+  white-space: nowrap;
 }
+
 
 .nav-links li a {
   text-decoration: none;
@@ -572,6 +607,16 @@ h2 {
 .nav-links li a:hover {
   background: black;
   color: white;
+}
+@media (max-width: 500px) {
+  .nav-links {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links li a {
+    width: 100%;
+  }
 }
 
 .glyph-grid {
@@ -680,8 +725,8 @@ h2 {
 
 #info-panel {
   position: fixed;
-  top: 180px;
-  left: 30px;
+  top: 25%;
+  left: 3%;
   width: 280px;
   background: rgb(0, 255, 17);
   border: 1px solid #bbb;
@@ -714,7 +759,9 @@ h2 {
   border-radius: 4px;
   cursor: pointer;
   z-index: 10;
-  position: relative;
+  position: fixed;
+  top: 16%;
+  left: 3%;
 }
 
 #get-info-btn:hover {
@@ -724,7 +771,7 @@ h2 {
 .download-btn {
   position: fixed;
   font-family: 'helvetica';
-  bottom: 20%;
+  bottom: 10%;
   /* distance from the top of the viewport */
   left: 3%;
   /* distance from the right of the viewport */
