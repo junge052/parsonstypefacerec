@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const texts = document.querySelectorAll('.intro, .typography, .intro-2');
   const fonts = [
     "'anthony', serif",
-    "'new-spirit', serif",
+    "'garamondt-italic', fun",
     "'crédible', serif",
     "'picnic', sans-serif",
     "Helvetica",
@@ -155,6 +155,16 @@ const floatingFonts = [
     style: {
       color: '#000',
       fontSize: '2rem',
+    }
+  },
+  {
+    name: 'Garamondt Italic',
+    category: ['script', 'fun'],
+    family: "'garamondt-italic', serif",
+    url: 'w.html',
+    style: {
+      color: '#000',
+      fontSize: '3rem',
     }
   }
 ];
