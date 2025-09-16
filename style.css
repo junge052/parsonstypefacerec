@@ -669,8 +669,8 @@ h2 {
   cursor: pointer;
   transition: font-family 0.3s ease;
   position: absolute;
-  top: 13px;
-  right: 8%;
+  top: 3%;
+  right: 2%;
 }
 
 .intro-2 {
