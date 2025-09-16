@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>User Input</title>
   <style>
     @font-face {
-        font-family: "ppneue";
-        src: url(fonts/PPNeueMontreal-Book.otf);
+      font-family: "ppneue";
+      src: url(fonts/PPNeueMontreal-Book.otf);
+    }
+    @font-face {
+      font-family: "picnic";
+      src: url(fonts/PicNic-Regular.otf);
+    }
+    @font-face {
+      font-family: "louise";
+      src: url(fonts/Louise-Regular.otf);
+    }
+    @font-face {
+      font-family: "ft88";
+      src: url(fonts/FT88-School.otf);
     }
     body {
       font-family: "helvetica";
@@ -15,14 +28,48 @@
       letter-spacing: -1px;
       margin: 10px;
     }
-    input, textarea {
-      width: 100%;
+    .nav-links {
+  list-style: none;
+  display: flex;        
+  justify-content: flex-end;
+  gap: 1rem;
+  z-index: 1000;
+  white-space: nowrap;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  border: 1px solid black;
+  padding: 0.25rem 0.5rem;
+  transition: background 0.2s;
+}
+.nav-links li a:hover {
+  background: black;
+  color: white;
+}
+@media (max-width: 500px) {
+  .nav-links {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links li a {
+    width: 100%;
+  }
+}
+    input,
+    textarea {
+      width: 50%;
       padding: 10px;
+      font-family: "helvetica";
       font-size: 16px;
-      border-radius: 8px;
+      border-radius: 4px;
       border: 1px solid #ccc;
       margin-bottom: 10px;
     }
+
     button {
       padding: 8px 16px;
       font-size: 16px;
@@ -32,98 +79,193 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
     button:hover {
       background-color: #00ff0d;
       border: 2px #000 dashed;
     }
+
     .responses {
       margin-top: 30px;
       padding-top: 10px;
       border-top: 1px solid #ddd;
     }
+
     .response {
-      background-color: #f0f0f0;
+      background-color: #ffffff;
       padding: 10px;
       margin-bottom: 10px;
-      border-radius: 5px;
+      border-radius: 4px;
+  
     }
+
     .timestamp {
       font-size: 12px;
       color: #555;
       margin-top: 5px;
     }
+
     .name {
       font-weight: bold;
       margin-bottom: 5px;
     }
+
+    .loader {
+      border: 4px solid #f3f3f3;
+      /* light gray */
+      border-top: 4px solid #00ff0d;
+      /* blue */
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 10px auto;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    #feedback-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    /* Card-like widgets */
+    .response {
+      background: white;
+      padding: 18px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .response:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px #00ff0d;
+    }
+    .t {
+      font-family: "picnic";
+    }
+    .y {
+      font-family: "louise";
+    }
+    .e {
+      font-family: "anthony";
+    }
+    .a {
+      font-family: "ft88";
+    }
+    .c {
+      font-family: "ppneue";
+    }
   </style>
 </head>
+
 <body>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    </ul>
 
-<h2>What's your favorite typeface?</h2>
+  <h2>What's your favorite <span class="t">t</span><span class="y">y</span>p<span class="e">e</span>f<span class="a">a</span><span class="c">c </span>e?</h2>
 
-<input type="text" id="name" placeholder="Your name (optional)">
-<textarea id="feedback" placeholder="Type here..."></textarea>
-<button onclick="submitFeedback()">Submit</button>
-
-<div class="responses">
-  <h3>User Responses:</h3>
-  <div id="feedback-list"></div>
-</div>
-
-<script>
-const scriptURL = 'https://script.google.com/macros/s/AKfycbxYFFh8QmNofxmey1k8UyJxX2MV4Ry7FDeCZ3w3oZkdr-f-luR0z-_2VMKptflisdnZ6Q/exec';
-
-async function submitFeedback() {
-  const nameInput = document.getElementById('name');
-  const feedbackInput = document.getElementById('feedback');
+  <input type="text" id="name" placeholder="Your name (optional)">
+  <textarea id="feedback" placeholder="Type here..."></textarea>
   
-  const name = nameInput.value.trim();
-  const feedback = feedbackInput.value.trim();
-
-  if (!feedback) {
-    alert('Please type your feedback.');
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append('name', name || 'Anonymous');
-  formData.append('feedback', feedback);
-
-  await fetch(scriptURL, { method: 'POST', body: formData });
-
-  nameInput.value = '';
-  feedbackInput.value = '';
-  await loadFeedback();
-}
-
-async function loadFeedback() {
-  try {
-    const response = await fetch(scriptURL);
-    const data = await response.json();
-
-    const feedbackList = document.getElementById('feedback-list');
-    feedbackList.innerHTML = '';
-
-    data.reverse().forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'response';
-
-      div.innerHTML = `
-        <div class="name">${item.name}</div>
-        <p>${item.feedback}</p>
-        <div class="timestamp">${new Date(item.timestamp).toLocaleString()}</div>
-      `;
-
-      feedbackList.appendChild(div);
+  <!-- Button + loader side by side -->
+  <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+    <button onclick="submitFeedback()">Submit</button>
+    <div id="loader" style="display:none; align-items:center; gap:5px;">
+      <div class="loader"></div>
+      <span>Submitting...</span>
+    </div>
+  </div>
+  
+  <!-- Responses below -->
+  <div class="responses">
+    <h3>User Responses:</h3>
+    <div id="feedback-list"></div>
+  </div>
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxeCZ9K44IjKvWPWgSDQPS79U55c4UqLVTumxMuZAanjYMQ0upREQImhQ1k0DnvhR7g_g/exec';
+  
+    async function submitFeedback() {
+      const nameInput = document.getElementById('name');
+      const feedbackInput = document.getElementById('feedback');
+      const loader = document.getElementById('loader');
+  
+      const name = nameInput.value.trim();
+      const feedback = feedbackInput.value.trim();
+  
+      if (!feedback) {
+        alert('Please type your feedback.');
+        return;
+      }
+  
+      loader.style.display = 'block'; // show loader
+  
+      try {
+        const formData = new FormData();
+        formData.append('name', name || 'Anonymous');
+        formData.append('feedback', feedback);
+  
+        await fetch(scriptURL, { method: 'POST', body: formData });
+  
+        nameInput.value = '';
+        feedbackInput.value = '';
+        await loadFeedback(); // refresh list
+      } catch (err) {
+        console.error("Error submitting feedback:", err);
+        alert("Something went wrong. Please try again.");
+      } finally {
+        loader.style.display = 'none'; //hide l
+        submitBtn.disabled = false;  
+      }
+    }
+  
+    async function loadFeedback() {
+      try {
+        const response = await fetch(scriptURL);
+        const data = await response.json();
+  
+        const feedbackList = document.getElementById('feedback-list');
+        feedbackList.innerHTML = '';
+  
+        data.reverse().forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'response';
+  
+          div.innerHTML = `
+            <div class="name">${item.name}</div>
+            <p>${item.feedback}</p>
+            <div class="timestamp">${new Date(item.timestamp).toLocaleString()}</div>
+          `;
+          feedbackList.appendChild(div);
+        });
+      } catch (err) {
+        console.error("Error loading feedback:", err);
+      }
+    }
+  
+    // 🔑 Enter key handler (global, not inside loadFeedback)
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" && !event.shiftKey && (document.activeElement.id === "feedback" || document.activeElement.id === "name")) {
+        event.preventDefault();
+        submitFeedback();
+      }
     });
-  } catch (err) {
-    console.error("Error loading feedback:", err);
-  }
-}
-
-window.onload = loadFeedback;
-</script>
+  
+    window.onload = loadFeedback;
+  </script>
+  
 
 </body>
+
 </html>

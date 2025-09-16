@@ -221,10 +221,10 @@ if (typefaceContainer) {
   
     setTimeout(() => {
       floaters.forEach(f => {
-        f.el.style.transition = ''; // clear transition for smooth animation after spread
+        f.el.style.transition = ''; // transition
       });
   
-      animate(); // start your animation loop
+      animate(); 
       const siteContent = document.querySelector('.site-content');
 if (siteContent) {
   siteContent.classList.remove('hidden');
